@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University GPA Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .university-title {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .program-info {
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info-text {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #34495e;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .reset-btn {
+            background-color: #95a5a6;
+        }
+
+        .reset-btn:hover {
+            background-color: #7f8c8d;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .subjects-container, .result-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .semester-header {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 10px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 120px;
+        }
+
+        .result {
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+
+        .result p {
+            margin: 10px 0;
+        }
+
+        #currentGPA, #classification {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+
+        .classification-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+
+        .classification-info h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .classification-info ul {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+
+        .classification-info li {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .mt-15 {
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+            
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>University GPA Calculator</h1>
+        <h2 class="university-title">BSc (Hons) Computer Science - Plymouth University</h2>
+        
+        <div class="program-info">
+            <p class="info-text">Enter your grades for each subject to calculate your GPA.</p>
+        </div>
+        
+        <div class="subjects-container">
+            <h2>Your Subjects</h2>
+            <table id="subjectsTable">
+                <thead>
+                    <tr>
+                        <th>Subject Name</th>
+                        <th>Credit Hours</th>
+                        <th>Grade</th>
+                        <th>Grade Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Semester 1 -->
+                    <tr>
+                        <td colspan="4" class="semester-header">Semester 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS101.3</strong> - Introduction to Computer Science</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MA101.3</strong> - Mathematics for Computing</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS102.3</strong> - Programming Fundamentals</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS103.2</strong> - Personal Development</td>
+                        <td>2</td>
+                        <td>
+                            <select class="grade-select" data-credits="2">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EL101.1</strong> - Academic Writing and Communication</td>
+                        <td>1</td>
+                        <td>
+                            <select class="grade-select" data-credits="1">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS105.3</strong> - Database Management Systems</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    
+                    <!-- Semester 2 -->
+                    <tr>
+                        <td colspan="4" class="semester-header">Semester 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS106.3</strong> - Algorithms and Data Structures</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS104.3</strong> - Computer Architecture</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SE102.3</strong> - Web Based Application Development</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SE103.3</strong> - Systems Analysis and Design</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CS107.3</strong> - Object Oriented Programming with C#</td>
+                        <td>3</td>
+                        <td>
+                            <select class="grade-select" data-credits="3">
+                                <option value="" selected>Select Grade</option>
+                                <option value="4.0">A+ (90-100)</option>
+                                <option value="4.0">A (85-89)</option>
+                                <option value="3.7">A- (80-84)</option>
+                                <option value="3.3">B+ (75-79)</option>
+                                <option value="3.0">B (70-74)</option>
+                                <option value="2.7">B- (65-69)</option>
+                                <option value="2.3">C+ (60-64)</option>
+                                <option value="2.0">C (55-59)</option>
+                                <option value="1.7">C- (50-54)</option>
+                                <option value="1.3">D+ (40-49)</option>
+                                <option value="1.0">D (30-39)</option>
+                                <option value="0.0">E (00-29)</option>
+                            </select>
+                        </td>
+                        <td class="grade-points">0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="result-container">
+            <h2>GPA Result</h2>
+            <div class="result">
+                <p>Total Credit Hours: <span id="totalCreditHours">0</span></p>
+                <p>Total Grade Points: <span id="totalGradePoints">0</span></p>
+                <p>Current GPA: <span id="currentGPA">0.00</span></p>
+                <p>Classification: <span id="classification">Not Available</span></p>
+            </div>
+            <div class="classification-info">
+                <h3>Degree Classifications:</h3>
+                <ul>
+                    <li><strong>First Class Honours:</strong> GPA of 3.70 or above</li>
+                    <li><strong>Second Class (Upper Division) Honours:</strong> GPA of 3.30 or above</li>
+                    <li><strong>Second Class (Lower Division) Honours:</strong> GPA of 3.00 or above</li>
+                    <li><strong>Pass:</strong> GPA of 2.00 or above</li>
+                    <li><strong>Fail:</strong> GPA below 2.00</li>
+                </ul>
+                <h3 class="mt-15">Grading Scale:</h3>
+                <ul>
+                    <li><strong>A+:</strong> 90–100 marks (GPA 4.0)</li>
+                    <li><strong>A:</strong> 85–89 marks (GPA 4.0)</li>
+                    <li><strong>A-:</strong> 80–84 marks (GPA 3.7)</li>
+                    <li><strong>B+:</strong> 75–79 marks (GPA 3.3)</li>
+                    <li><strong>B:</strong> 70–74 marks (GPA 3.0)</li>
+                    <li><strong>B-:</strong> 65–69 marks (GPA 2.7)</li>
+                    <li><strong>C+:</strong> 60–64 marks (GPA 2.3)</li>
+                    <li><strong>C:</strong> 55–59 marks (GPA 2.0)</li>
+                    <li><strong>C-:</strong> 50–54 marks (GPA 1.7)</li>
+                    <li><strong>D+:</strong> 40–49 marks (GPA 1.3)</li>
+                    <li><strong>D:</strong> 30–39 marks (GPA 1.0)</li>
+                    <li><strong>E:</strong> 00–29 marks (GPA 0.0)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="resetAll" class="reset-btn">Reset All</button>
+        </div>
+        
+        <footer class="footer">
+            <p>© 2024 <a href="https://github.com/AdithyaHerath" target="_blank">Adithya Herath</a>. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const gradeSelects = document.querySelectorAll('.grade-select');
+        const gradePointsCells = document.querySelectorAll('.grade-points');
+        const resetAllBtn = document.getElementById('resetAll');
+        const totalCreditHoursSpan = document.getElementById('totalCreditHours');
+        const totalGradePointsSpan = document.getElementById('totalGradePoints');
+        const currentGPASpan = document.getElementById('currentGPA');
+        const classificationSpan = document.getElementById('classification');
+
+        // Add event listeners
+        gradeSelects.forEach((select, index) => {
+            select.addEventListener('change', () => {
+                updateGradePoints(select, gradePointsCells[index]);
+                calculateGPA();
+            });
+        });
+        
+        resetAllBtn.addEventListener('click', resetAll);
+
+        // Update grade points when a grade is selected
+        function updateGradePoints(select, cell) {
+            const credits = parseFloat(select.getAttribute('data-credits'));
+            const gradeValue = select.value;
+            
+            if (gradeValue === "") {
+                cell.textContent = "0.00";
+            } else {
+                const grade = parseFloat(gradeValue);
+                const gradePoints = credits * grade;
+                cell.textContent = gradePoints.toFixed(2);
+            }
+        }
+
+        // Get classification based on GPA
+        function getClassification(gpa) {
+            if (gpa >= 3.70) return "First Class Honours";
+            if (gpa >= 3.30) return "Second Class (Upper Division) Honours";
+            if (gpa >= 3.00) return "Second Class (Lower Division) Honours";
+            if (gpa >= 2.00) return "Pass";
+            return "Fail";
+        }
+        
+        // Get letter grade from numeric grade
+        function getGradeLetter(grade) {
+            if (grade === null) return '';
+            if (grade === 4.0) return 'A+/A';
+            if (grade === 3.7) return 'A-';
+            if (grade === 3.3) return 'B+';
+            if (grade === 3.0) return 'B';
+            if (grade === 2.7) return 'B-';
+            if (grade === 2.3) return 'C+';
+            if (grade === 2.0) return 'C';
+            if (grade === 1.7) return 'C-';
+            if (grade === 1.3) return 'D+';
+            if (grade === 1.0) return 'D';
+            if (grade === 0.0) return 'E';
+            return '';
+        }
+
+        // Calculate GPA
+        function calculateGPA() {
+            let totalCredits = 0;
+            let totalGradePoints = 0;
+            let hasGrades = false;
+            
+            gradeSelects.forEach((select, index) => {
+                const gradeValue = select.value;
+                
+                if (gradeValue !== "") {
+                    const credits = parseFloat(select.getAttribute('data-credits'));
+                    const grade = parseFloat(gradeValue);
+                    
+                    totalCredits += credits;
+                    totalGradePoints += (credits * grade);
+                    hasGrades = true;
+                }
+            });
+            
+            if (!hasGrades) {
+                totalCreditHoursSpan.textContent = "0";
+                totalGradePointsSpan.textContent = "0";
+                currentGPASpan.textContent = "0.00";
+                classificationSpan.textContent = "Not Available";
+                return;
+            }
+            
+            const gpa = totalGradePoints / totalCredits;
+            const classification = getClassification(gpa);
+            
+            totalCreditHoursSpan.textContent = totalCredits.toFixed(1);
+            totalGradePointsSpan.textContent = totalGradePoints.toFixed(2);
+            currentGPASpan.textContent = gpa.toFixed(2);
+            classificationSpan.textContent = classification;
+        }
+
+        // Reset all grades
+        function resetAll() {
+            if (confirm('Are you sure you want to reset all grades?')) {
+                gradeSelects.forEach((select, index) => {
+                    select.selectedIndex = 0;
+                    gradePointsCells[index].textContent = "0.00";
+                });
+                
+                totalCreditHoursSpan.textContent = "0";
+                totalGradePointsSpan.textContent = "0";
+                currentGPASpan.textContent = "0.00";
+                classificationSpan.textContent = "Not Available";
+            }
+        }
+    </script>
+</body>
+</html> 
