@@ -13,7 +13,7 @@ A simple, user-friendly web application to calculate your GPA for the BSc (Hons)
 
 ## How to Use
 
-1. Open `index.html` in any web browser
+1. click this ( link https://adithyaherath.github.io/GPA-Calculator/ )
 2. Select grades for your subjects using the dropdown menus
 3. GPA and classification will update automatically as you select grades
 4. Use "Reset All" if you want to clear all grades and start over
